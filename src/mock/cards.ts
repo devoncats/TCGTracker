@@ -1,0 +1,88 @@
+import { PokemonCardData } from "@/types";
+
+export const data: PokemonCardData[] = [
+  {
+    id: "632876",
+    name: "Barraskewda",
+    number: "063/182",
+    set: "SV10: Destined Rivals (DRI)",
+    rarity: "Rare",
+    retail: 0.11,
+    market: 0.04,
+    image:
+      "https://tcgplayer-cdn.tcgplayer.com/product/632876_in_1000x1000.jpg",
+    added: "2025-09-02T04:26:17.434Z",
+  },
+  {
+    id: "630807",
+    name: "Arboliva ex",
+    number: "023/182",
+    set: "SV10: Destined Rivals",
+    rarity: "Double Rare",
+    retail: 4.99,
+    market: 0.63,
+    image:
+      "https://tcgplayer-cdn.tcgplayer.com/product/630807_in_1000x1000.jpg",
+    added: "2025-09-01T04:26:17.434Z",
+  },
+  {
+    id: "632873",
+    name: "Abomasnow",
+    number: "060/182",
+    set: "SV10: Destined Rivals (DRI)",
+    rarity: "Uncommon",
+    retail: 0.5,
+    market: 0.05,
+    image:
+      "https://tcgplayer-cdn.tcgplayer.com/product/632873_in_1000x1000.jpg",
+    added: "2025-08-01T04:26:17.434Z",
+  },
+  {
+    id: "632961",
+    name: "Arven's Greedent",
+    number: "159/182",
+    set: "SV10: Destined Rivals (DRI)",
+    rarity: "Rare",
+    retail: 1.0,
+    market: 0.44,
+    image:
+      "https://tcgplayer-cdn.tcgplayer.com/product/632961_in_1000x1000.jpg",
+    added: "2025-02-01T04:26:17.434Z",
+  },
+  {
+    id: "632992",
+    name: "Blaziken",
+    number: "192/182",
+    set: "SV10: Destined Rivals (DRI)",
+    rarity: "Illustration Rare",
+    retail: 39.95,
+    market: 14.45,
+    image:
+      "https://tcgplayer-cdn.tcgplayer.com/product/632992_in_1000x1000.jpg",
+    added: "2025-09-02T04:26:17.434Z",
+  },
+  {
+    id: "632870",
+    name: "Buizel",
+    number: "057/182",
+    set: "SV10: Destined Rivals (DRI)",
+    rarity: "Common",
+    retail: 0.33,
+    market: 0.12,
+    image:
+      "https://tcgplayer-cdn.tcgplayer.com/product/632870_in_1000x1000.jpg",
+    added: "2025-09-02T04:26:17.434Z",
+  },
+  {
+    id: "535095",
+    name: "Arven",
+    number: "235/091",
+    set: "SV: Paldean Fates (PAF)",
+    rarity: "Special Illustration Rare",
+    retail: 29.99,
+    market: 16.2,
+    image:
+      "https://tcgplayer-cdn.tcgplayer.com/product/535095_in_1000x1000.jpg",
+    added: "2025-09-02T04:26:17.434Z",
+  },
+];

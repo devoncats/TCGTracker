@@ -18,7 +18,7 @@ function Logo() {
     <Button asChild variant="ghost" className="p-2">
       <Link href="/">
         <Image
-          src={"logo/logo-full.svg"}
+          src={"/logo/logo-full.svg"}
           alt={`${site.name} logo`}
           width={160}
           height={25}
