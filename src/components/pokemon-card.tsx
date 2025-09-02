@@ -8,7 +8,7 @@ export function PokemonCard({
   set,
   image,
   rarity,
-  retail,
+  spotlight,
   market,
   added,
 }: PokemonCardData) {
@@ -35,7 +35,8 @@ export function PokemonCard({
           <div className="flex w-full items-end justify-between">
             <div>
               <p>
-                Retail price: <span className="font-semibold">${retail}</span>
+                Retail price:{" "}
+                <span className="font-semibold">${spotlight}</span>
               </p>
               <p>
                 Market price: <span className="font-semibold">${market}</span>
