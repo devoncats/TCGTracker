@@ -2,7 +2,7 @@ import { PokemonCardData, SortBy } from "@/types";
 
 export function getMaximumPrice(cards: PokemonCardData[]): number {
   const max = cards
-    .map((card) => card.retail)
+    .map((card) => card.spotlight)
     .reduce((a, b) => Math.max(a, b), 0);
 
   return max;
@@ -21,9 +21,9 @@ export function sortAndFilterCards(
         case SortBy.DateHighToLow:
           return Date.parse(b.added) - Date.parse(a.added);
         case SortBy.PriceLowToHigh:
-          return a.market - b.market;
+          return a.spotlight - b.spotlight;
         case SortBy.PriceHighToLow:
-          return b.market - a.market;
+          return b.spotlight - a.spotlight;
         case SortBy.TitleAToZ:
           return a.name.localeCompare(b.name);
         case SortBy.TitleZToA:
@@ -32,14 +32,35 @@ export function sortAndFilterCards(
           return 0;
       }
     })
-    .filter((card) => card.retail <= maxPrice);
+    .filter((card) => card.spotlight <= maxPrice);
 
   return sortedAndFilteredCards;
 }
 
+export function sortCards(cards: PokemonCardData[], sortBy: SortBy) {
+  const sortedCards = [...cards].sort((a, b) => {
+    switch (sortBy) {
+      case SortBy.DateLowToHigh:
+        return Date.parse(a.added) - Date.parse(b.added);
+      case SortBy.DateHighToLow:
+        return Date.parse(b.added) - Date.parse(a.added);
+      case SortBy.PriceLowToHigh:
+        return a.spotlight - b.spotlight;
+      case SortBy.PriceHighToLow:
+        return b.spotlight - a.spotlight;
+      case SortBy.TitleAToZ:
+        return a.name.localeCompare(b.name);
+      case SortBy.TitleZToA:
+        return b.name.localeCompare(a.name);
+      default:
+        return 0;
+    }
+  });
+}
+
 export function calculateTotal(
   cards: PokemonCardData[],
-  property: "retail" | "market"
+  property: "spotlight" | "market"
 ): string {
   return cards
     .map((card) => card[property])

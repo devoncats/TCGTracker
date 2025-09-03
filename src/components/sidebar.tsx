@@ -3,11 +3,11 @@ import { Input } from "@/components/ui/input";
 
 interface SidebarProps {
   total: number;
-  retail: string;
   market: string;
+  spotlight: string;
 }
 
-export function Sidebar({ total, retail, market }: SidebarProps) {
+export function Sidebar({ total, spotlight, market }: SidebarProps) {
   return (
     <section className="bg-muted hidden min-w-sm flex-1 flex-col gap-6 border-r p-6 lg:flex">
       <div className="flex gap-4">
@@ -20,8 +20,8 @@ export function Sidebar({ total, retail, market }: SidebarProps) {
 
         <div>
           <p>Total cards: {total}</p>
-          <p>Colection best retail: ${retail}</p>
-          <p>Collection best market: ${market}</p>
+          <p>Collection best spotlight: ${spotlight}</p>
+          <p>Colection best market: ${market}</p>
         </div>
       </div>
     </section>

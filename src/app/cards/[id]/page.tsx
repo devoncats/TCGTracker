@@ -13,6 +13,10 @@ export default async function CardPage({
     return <div>Card not found</div>;
   }
 
+  if (!card.image || !card.name) {
+    return <div>Image or name not available</div>;
+  }
+
   return (
     <div>
       <span>{card.name}</span>

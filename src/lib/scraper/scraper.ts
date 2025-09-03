@@ -1,14 +1,23 @@
 "use server";
 
-import { PokemonCardData } from "@/types";
+import { LOCALE, USER_AGENT, VALID_HOSTNAMES } from "@/constants";
+import { PokemonCardDataDTO } from "@/types";
 import { chromium } from "playwright";
 
-export async function scrape(url: string): Promise<PokemonCardData> {
+export async function scrape(url: string): Promise<PokemonCardDataDTO> {
+  const isValidUrl = validateUrl(url);
+
+  if (!isValidUrl) {
+    return {
+      error: true,
+      message: "Invalid URL format",
+    };
+  }
+
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
-    userAgent:
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-    locale: "en-US",
+    userAgent: USER_AGENT,
+    locale: LOCALE,
   });
 
   const page = await context.newPage();
@@ -25,55 +34,80 @@ export async function scrape(url: string): Promise<PokemonCardData> {
 
       function getImage(selector: string) {
         const element = root.querySelector(selector) as HTMLImageElement;
-        return element ? element.src : null;
+        return element ? element.getAttribute("src") : null;
       }
 
       return {
-        fullName: getText(".product-details__name"),
-        set: getText(".product-details__name__sub-header__links span"),
-        numberRarity: getText(".product__item-details__attributes span"),
-        spotlightPrice: getText(".spotlight__listing .spotlight__price"),
-        marketPrice: getText(".price-points__upper__price"),
-        image: getImage(".lazy-image__wrapper img"),
+        fetchedTitle: getText(".product-details__name"),
+        fetchedSet: getText(".product-details__name__sub-header__links span"),
+        fetchedNumberRarity: getText(".product__item-details__attributes span"),
+        fetchedSpotlightPrice: getText(".spotlight__listing .spotlight__price"),
+        fetchedMarketPrice: getText(".price-points__upper__price"),
+        fetchedImage: getImage(".lazy-image__wrapper img"),
       };
     });
 
-    const id = url.split("/")[4];
+    const { pathname } = new URL(url);
+    const [_, id] = pathname.split("/").filter(Boolean);
 
-    const name = data.fullName?.split(" - ")[0] || null;
-    const [number, rarity] = data.numberRarity?.split(" / ") || [null, null];
+    const [name] = data.fetchedTitle ? data.fetchedTitle.split(" - ") : [null];
 
-    const { set, spotlightPrice, marketPrice, image } = data;
+    const [number, rarity] = data.fetchedNumberRarity
+      ? data.fetchedNumberRarity.split(" / ")
+      : [null, null];
 
-    image?.replace("200x200", "1000x1000");
+    const {
+      fetchedSet,
+      fetchedSpotlightPrice,
+      fetchedMarketPrice,
+      fetchedImage,
+    } = data;
+
+    const spotlight = fetchedSpotlightPrice
+      ? Number(fetchedSpotlightPrice.replace("$", ""))
+      : null;
+
+    const market = fetchedMarketPrice
+      ? Number(fetchedMarketPrice.replace("$", ""))
+      : null;
+
+    const image = fetchedImage
+      ? fetchedImage.replace("200x200", "1000x1000")
+      : null;
 
     return {
       id,
       name,
       number,
-      set,
+      set: fetchedSet,
       image,
       rarity,
-      spotlight: Number(spotlightPrice),
-      market: Number(marketPrice),
-      added: new Date().toISOString(),
+      spotlight,
+      market,
+      error: false,
     };
   } catch (error) {
     return {
-      id: null,
-      name: null,
-      number: null,
-      set: null,
-      image: null,
-      rarity: null,
-      spotlight: null,
-      market: null,
-      added: null,
-      error: (error as Error).message,
+      error: true,
+      message: (error as Error).message,
     };
   } finally {
     await page.close();
     await context.close();
     await browser.close();
   }
+}
+
+function validateUrl(url: string): boolean {
+  const parsedUrl = new URL(url);
+
+  if (VALID_HOSTNAMES.includes(parsedUrl.hostname)) {
+    const segments = parsedUrl.pathname.split("/").filter(Boolean);
+
+    if (segments.length > 1 && segments[0] === "product") {
+      return true;
+    }
+  }
+
+  return false;
 }

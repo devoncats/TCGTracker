@@ -1,4 +1,4 @@
-import { PokemonCardData } from "@/types";
+import PokemonCardData from "@/types";
 import Link from "next/link";
 
 export function PokemonCard({
