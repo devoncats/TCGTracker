@@ -1,14 +1,6 @@
-export interface PokemonCardData {
-  id: string;
-  name: string;
-  number: string;
-  set: string;
-  image: string;
-  rarity: string;
-  spotlight: number;
-  market: number;
-  added: string;
-}
+import { Card } from "@prisma/client";
+
+export interface PokemonCardData extends Card {}
 
 export interface PokemonCardDataDTO {
   id?: string | null;
@@ -19,7 +11,6 @@ export interface PokemonCardDataDTO {
   rarity?: string | null;
   spotlight?: number | null;
   market?: number | null;
-  added?: string | null;
   error: boolean;
   message?: string;
 }

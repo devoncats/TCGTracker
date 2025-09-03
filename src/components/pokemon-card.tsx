@@ -1,4 +1,4 @@
-import PokemonCardData from "@/types";
+import { PokemonCardData } from "@/types";
 import Link from "next/link";
 
 export function PokemonCard({
@@ -10,9 +10,9 @@ export function PokemonCard({
   rarity,
   spotlight,
   market,
-  added,
+  createdAt,
 }: PokemonCardData) {
-  const date = new Date(added).toLocaleDateString("en-US", {
+  const date = createdAt.toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
     day: "numeric",

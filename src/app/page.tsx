@@ -1,20 +1,24 @@
-"use server";
-
 import { Filters } from "@/components/filters";
 import { Sidebar } from "@/components/sidebar";
+import { getAllCards } from "@/lib/actions/card.actions";
 import { calculateTotal, getMaximumPrice } from "@/lib/card-adapter";
-import { scrape } from "@/lib/scraper/scraper";
-import { data } from "@/mock/cards";
+import { use } from "react";
 
-export default async function Home() {
+export default function Home() {
+  const petition = use(getAllCards());
+
+  if (petition.error) {
+    return <div>Error</div>;
+  }
+
+  const { data } = petition;
+
+  if (!data) return <div>No bitches</div>;
+
   const maxPrice = getMaximumPrice(data);
   const totalCard = data.length;
   const spotlightTotal = calculateTotal(data, "spotlight");
   const marketTotal = calculateTotal(data, "market");
-
-  const fetchedData = await scrape("https://www.tcgplayer.com/product/610534");
-
-  console.log(fetchedData);
 
   return (
     <main className="flex h-[calc(100vh-69px)] flex-1">

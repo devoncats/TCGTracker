@@ -17,9 +17,9 @@ export function sortAndFilterCards(
     .sort((a, b) => {
       switch (sortBy) {
         case SortBy.DateLowToHigh:
-          return Date.parse(a.added) - Date.parse(b.added);
+          return Number(a.createdAt) - Number(b.createdAt);
         case SortBy.DateHighToLow:
-          return Date.parse(b.added) - Date.parse(a.added);
+          return Number(b.createdAt) - Number(a.createdAt);
         case SortBy.PriceLowToHigh:
           return a.spotlight - b.spotlight;
         case SortBy.PriceHighToLow:
@@ -41,9 +41,9 @@ export function sortCards(cards: PokemonCardData[], sortBy: SortBy) {
   const sortedCards = [...cards].sort((a, b) => {
     switch (sortBy) {
       case SortBy.DateLowToHigh:
-        return Date.parse(a.added) - Date.parse(b.added);
+        return Number(a.createdAt) - Number(b.createdAt);
       case SortBy.DateHighToLow:
-        return Date.parse(b.added) - Date.parse(a.added);
+        return Number(b.createdAt) - Number(a.createdAt);
       case SortBy.PriceLowToHigh:
         return a.spotlight - b.spotlight;
       case SortBy.PriceHighToLow:
