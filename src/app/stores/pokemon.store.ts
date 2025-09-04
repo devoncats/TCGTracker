@@ -1,5 +1,10 @@
 import { getAllCards } from "@/lib/actions/card.actions";
-import { getTotal, searchCards, sortCards } from "@/lib/card-adapter";
+import {
+  filterCardsByPrice,
+  getTotal,
+  searchCards,
+  sortCards,
+} from "@/lib/card-adapter";
 import { PokemonCardStore } from "@/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -55,12 +60,13 @@ export const usePokemonStore = create<PokemonCardStore>()(
 
       // Computed selectors
       getRefinedCards: () => {
-        const { cards, searchTerm, sortConfig } = get();
+        const { cards, searchTerm, sortConfig, priceFilter } = get();
 
         const searchedCards = searchCards(cards, searchTerm);
-        const sortedCard = sortCards(searchedCards, sortConfig);
+        const sortedCards = sortCards(searchedCards, sortConfig);
+        const filteresCards = filterCardsByPrice(sortedCards, priceFilter);
 
-        return sortedCard;
+        return filteresCards;
       },
       getStats: () => {
         const { cards } = get();
@@ -84,6 +90,7 @@ export const usePokemonStore = create<PokemonCardStore>()(
       partialize: (state) => ({
         searchTerm: state.searchTerm,
         sortConfig: state.sortConfig,
+        priceFilter: state.priceFilter,
       }),
     }
   )

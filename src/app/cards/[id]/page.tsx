@@ -1,13 +1,13 @@
-import { data } from "@/mock/cards";
-import Image from "next/image";
+"use client";
 
-export default async function CardPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const card = data.find((card) => card.id === id);
+import { usePokemonStore } from "@/app/stores/pokemon.store";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+
+export default function CardPage() {
+  const { cards } = usePokemonStore();
+  const { id } = useParams<{ id: string }>();
+  const card = cards.find((card) => card.id === id);
 
   if (!card) {
     return <div>Card not found</div>;

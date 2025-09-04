@@ -1,12 +1,4 @@
-import { PokemonCardData, sortBy, SortBy } from "@/types";
-
-export function getMaximumPrice(cards: PokemonCardData[]): number {
-  const maximum = cards
-    .map((card) => card.spotlight)
-    .reduce((a, b) => Math.max(a, b), 0);
-
-  return maximum;
-}
+import { PokemonCardData, SortBy } from "@/types";
 
 export function getTotal(
   cards: PokemonCardData[],
@@ -24,35 +16,39 @@ export function sortCards(
 ): PokemonCardData[] {
   const sortedCards = [...cards].sort((a, b) => {
     switch (sortConfig) {
-      case sortBy.ASC_NAME:
+      case "ASC_NAME":
         return a.name.localeCompare(b.name);
 
-      case sortBy.DESC_NAME:
+      case "DESC_NAME":
         return b.name.localeCompare(a.name);
 
-      case sortBy.ASC_SET:
+      case "ASC_SET":
         return a.set.localeCompare(b.set);
 
-      case sortBy.DESC_SET:
+      case "DESC_SET":
         return b.set.localeCompare(a.set);
 
-      case sortBy.ASC_SPOTLIGHT:
+      case "ASC_SPOTLIGHT":
         return a.spotlight - b.spotlight;
 
-      case sortBy.DESC_SPOTLIGHT:
+      case "DESC_SPOTLIGHT":
         return b.spotlight - a.spotlight;
 
-      case sortBy.ASC_MARKET:
+      case "ASC_MARKET":
         return a.market - b.market;
 
-      case sortBy.DESC_MARKET:
+      case "DESC_MARKET":
         return b.market - a.market;
 
-      case sortBy.ASC_DATE:
-        return a.createdAt.getTime() - b.createdAt.getTime();
+      case "ASC_DATE":
+        return (
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
 
-      case sortBy.DESC_DATE:
-        return b.createdAt.getTime() - a.createdAt.getTime();
+      case "DESC_DATE":
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
 
       default:
         return 0;
@@ -61,6 +57,7 @@ export function sortCards(
 
   return sortedCards;
 }
+
 export function searchCards(
   cards: PokemonCardData[],
   searchTerm: string
@@ -70,11 +67,23 @@ export function searchCards(
   const loweredSearchTerm = searchTerm.toLowerCase();
 
   const searchedCards = cards.filter((card) => {
-    card.name.toLowerCase().includes(loweredSearchTerm) ||
+    return (
+      // Added missing return statement
+      card.name.toLowerCase().includes(loweredSearchTerm) ||
       card.set.toLowerCase().includes(loweredSearchTerm) ||
-      card.number.includes(loweredSearchTerm) ||
-      card.rarity.includes(loweredSearchTerm);
+      card.number.toLowerCase().includes(loweredSearchTerm) ||
+      card.rarity.toLowerCase().includes(loweredSearchTerm)
+    );
   });
 
   return searchedCards;
+}
+
+export function filterCardsByPrice(
+  cards: PokemonCardData[],
+  maxPrice: number
+): PokemonCardData[] {
+  if (maxPrice === 0) return cards;
+
+  return cards.filter((card) => card.spotlight <= maxPrice);
 }
