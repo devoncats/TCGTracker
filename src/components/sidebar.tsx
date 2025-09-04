@@ -1,35 +1,32 @@
 "use client";
 
+import { usePokemonStore } from "@/app/stores/pokemon.store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
 
-interface SidebarProps {
-  total: number;
-  market: string;
-  spotlight: string;
-}
+export function Sidebar() {
+  // FIX: THIS IS THE WRONG VARIABLE, ONLY USING FOR TESTING PORPUSES
+  const { searchTerm, setSearchTerm, getStats } = usePokemonStore();
 
-export function Sidebar({ total, spotlight, market }: SidebarProps) {
-  const [urlValue, setUrlValue] = useState("");
+  const { owned, spotlightTotal, marketTotal } = getStats();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    console.log(urlValue);
+    console.log(searchTerm);
 
     // TODO: Disable the button, Validate url, Send the value to the backend, get response in a toast
   };
 
   const handleUrlValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUrlValue(event.target.value);
+    setSearchTerm(event.target.value);
   };
 
   return (
     <section className="bg-muted hidden min-w-sm flex-1 flex-col gap-6 border-r p-6 lg:flex">
       <form onSubmit={handleSubmit} className="flex gap-4">
         <Input
-          value={urlValue}
+          value={searchTerm}
           onChange={handleUrlValueChange}
           className="bg-white"
         />
@@ -40,9 +37,9 @@ export function Sidebar({ total, spotlight, market }: SidebarProps) {
         <h1 className="font-display text-2xl font-bold">Your stats</h1>
 
         <div>
-          <p>Total cards: {total}</p>
-          <p>Collection best spotlight: ${spotlight}</p>
-          <p>Colection best market: ${market}</p>
+          <p>Total cards: {owned}</p>
+          <p>Collection best spotlight: ${spotlightTotal}</p>
+          <p>Colection best market: ${marketTotal}</p>
         </div>
       </div>
     </section>

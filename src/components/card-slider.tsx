@@ -1,27 +1,27 @@
+import { usePokemonStore } from "@/app/stores/pokemon.store";
 import { Slider } from "@/components/ui/slider";
 
-interface CardSliderProps {
-  maxPrice: number;
-  filterPrice: number;
-  action: ([value]: number[]) => void;
-}
+export default function CardSlider() {
+  const { getStats, priceFilter, setPriceFilter, getRefinedCards } =
+    usePokemonStore();
+  const maxPrice = getStats().spotlightTotal;
 
-export default function CardSlider({
-  maxPrice,
-  filterPrice,
-  action,
-}: CardSliderProps) {
+  const handlePriceFilterChange = ([value]: number[]) => {
+    setPriceFilter(value);
+  };
+
   return (
     <div className="flex gap-2">
       <span>Max price: </span>
       <Slider
-        value={[filterPrice]}
-        onValueChange={action}
-        max={maxPrice}
+        value={[priceFilter]}
+        onValueChange={handlePriceFilterChange}
+        max={Number(maxPrice)}
         step={1}
         className="w-64"
       />
-      <span className="w-16">$ {filterPrice}</span>
+
+      <span className="w-16">$ {priceFilter}</span>
     </div>
   );
 }

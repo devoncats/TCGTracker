@@ -1,31 +1,12 @@
-import { Filters } from "@/components/filters";
+import { PokemonCardDashboard } from "@/components/pokemon-card-dashboard";
 import { Sidebar } from "@/components/sidebar";
-import { getAllCards } from "@/lib/actions/card.actions";
-import { calculateTotal, getMaximumPrice } from "@/lib/card-adapter";
 
-export default async function Home() {
-  const { data, error } = await getAllCards();
-
-  if (error) {
-    return <div>Error</div>;
-  }
-
-  if (!data) return <div>No bitches</div>;
-
-  const maxPrice = getMaximumPrice(data);
-  const totalCard = data.length;
-  const spotlightTotal = calculateTotal(data, "spotlight");
-  const marketTotal = calculateTotal(data, "market");
-
+export default async function HomePage() {
   return (
-    <main className="flex h-[calc(100vh-69px)] flex-1">
-      <Sidebar
-        total={totalCard}
-        spotlight={spotlightTotal}
-        market={marketTotal}
-      />
+    <main className="flex h-[calc(100vh-69px)]">
+      <Sidebar />
 
-      <Filters data={data} maxPrice={maxPrice} />
+      <PokemonCardDashboard />
     </main>
   );
 }

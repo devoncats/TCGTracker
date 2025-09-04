@@ -1,3 +1,4 @@
+import { usePokemonStore } from "@/app/stores/pokemon.store";
 import {
   Select,
   SelectContent,
@@ -5,30 +6,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { SortBy } from "@/types";
+import { sortBy } from "@/types";
 
-interface CardSortByProps {
-  sortBy: SortBy;
-  action: (value: string) => void;
-}
+export function CardSortBy() {
+  const { sortConfig, setSortConfig } = usePokemonStore();
 
-export function CardSortBy({ sortBy, action }: CardSortByProps) {
+  const handleSortConfigChange = (value: string) => {
+    setSortConfig(value);
+  };
+
   return (
-    <Select defaultValue={sortBy} onValueChange={action}>
+    <Select defaultValue={sortConfig} onValueChange={handleSortConfigChange}>
       <SelectTrigger className="w-48">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value={SortBy.DateLowToHigh}>Date: Low to High</SelectItem>
-        <SelectItem value={SortBy.DateHighToLow}>Date: High to Low</SelectItem>
-        <SelectItem value={SortBy.PriceLowToHigh}>
-          Price: Low to High
-        </SelectItem>
-        <SelectItem value={SortBy.PriceHighToLow}>
-          Price: High to Low
-        </SelectItem>
-        <SelectItem value={SortBy.TitleAToZ}>Title: A - Z</SelectItem>
-        <SelectItem value={SortBy.TitleZToA}>Title: Z - A</SelectItem>
+        {Object.entries(sortBy).map(([index, name]) => (
+          <SelectItem key={index} value={index}>
+            {name}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );
