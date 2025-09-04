@@ -3,14 +3,16 @@ import { Card } from "@prisma/client";
 export interface PokemonCardData extends Card {}
 
 export interface PokemonCardDataDTO {
-  id?: string | null;
-  name?: string | null;
-  number?: string | null;
-  set?: string | null;
-  image?: string | null;
-  rarity?: string | null;
-  spotlight?: number | null;
-  market?: number | null;
+  data?: {
+    id?: string | null;
+    name?: string | null;
+    number?: string | null;
+    set?: string | null;
+    image?: string | null;
+    rarity?: string | null;
+    spotlight?: number | null;
+    market?: number | null;
+  };
   error: boolean;
   message?: string;
 }

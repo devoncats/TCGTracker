@@ -2,16 +2,13 @@ import { Filters } from "@/components/filters";
 import { Sidebar } from "@/components/sidebar";
 import { getAllCards } from "@/lib/actions/card.actions";
 import { calculateTotal, getMaximumPrice } from "@/lib/card-adapter";
-import { use } from "react";
 
-export default function Home() {
-  const petition = use(getAllCards());
+export default async function Home() {
+  const { data, error } = await getAllCards();
 
-  if (petition.error) {
+  if (error) {
     return <div>Error</div>;
   }
-
-  const { data } = petition;
 
   if (!data) return <div>No bitches</div>;
 

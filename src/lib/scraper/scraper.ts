@@ -24,7 +24,9 @@ export async function scrape(url: string): Promise<PokemonCardDataDTO> {
 
   try {
     await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
-    await page.waitForSelector(".product-details__product", { timeout: 10000 });
+    await page.waitForSelector(".product-details__product .spotlight__price", {
+      timeout: 10000,
+    });
 
     const data = await page.$eval(".product-details__product", (root) => {
       function getText(selector: string) {
@@ -76,15 +78,17 @@ export async function scrape(url: string): Promise<PokemonCardDataDTO> {
       : null;
 
     return {
-      id,
-      name,
-      number,
-      set: fetchedSet,
-      image,
-      rarity,
-      spotlight,
-      market,
       error: false,
+      data: {
+        id,
+        name,
+        number,
+        set: fetchedSet,
+        image,
+        rarity,
+        spotlight,
+        market,
+      },
     };
   } catch (error) {
     return {

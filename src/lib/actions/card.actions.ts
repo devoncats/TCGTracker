@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { PokemonCardData } from "@/types";
 
+// TODO: add loading
+
 export async function getAllCards() {
   try {
     const cards = await prisma.card.findMany();
