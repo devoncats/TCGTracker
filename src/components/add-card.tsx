@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
+import { toast } from "sonner";
 
 export default function AddCard() {
   const { pageRoute, setPageRoute, setPriceFilter, getStats, addCard } =
@@ -10,10 +11,28 @@ export default function AddCard() {
 
   const { maxSpotlightPrice } = getStats();
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    addCard();
+    if (!pageRoute.trim()) {
+      toast.error("Error", {
+        description: "Please enter a TCG Player URL",
+      });
+
+      return;
+    }
+
+    const result = await addCard();
+
+    if (result.error) {
+      toast.error("Error", {
+        description: result.message,
+      });
+
+      return;
+    }
+
+    toast.success("Success", { description: "Card added successfully!" });
 
     setPageRoute("");
     setPriceFilter(maxSpotlightPrice);

@@ -47,7 +47,7 @@ export interface PokemonCardStore {
 
   // Actions
   fetchCards: () => Promise<void>;
-  addCard: () => void;
+  addCard: () => Promise<{ error: boolean; message?: string }>;
   updateCard: (
     id: string,
     card: Omit<PokemonCardData, "id" | "updatedAt">

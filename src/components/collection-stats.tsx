@@ -15,11 +15,11 @@ export function CollectionStats() {
         </h3>
         <h3 className="flex items-center justify-between">
           <span className="text-muted-foreground">Spotlight total value</span>
-          <span className="font-semibold">{spotlightTotal}</span>
+          <span className="font-semibold">$ {spotlightTotal}</span>
         </h3>
         <h3 className="flex items-center justify-between">
           <span className="text-muted-foreground">Market total value</span>
-          <span className="font-semibold">{marketTotal}</span>
+          <span className="font-semibold">$ {marketTotal}</span>
         </h3>
       </div>
     </article>

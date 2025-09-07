@@ -65,7 +65,7 @@ export const usePokemonStore = create<PokemonCardStore>()(
             isLoading: false,
           });
 
-          return;
+          return { error: true, message: scrapped.message || "Unknown error" };
         }
 
         const response = await createCard(scrapped.data!);
@@ -77,12 +77,12 @@ export const usePokemonStore = create<PokemonCardStore>()(
             isLoading: false,
           });
 
-          return;
+          return { error: true, message: scrapped.message || "Unknown error" };
         }
 
         set({ cards: [...cards, response.data!], isLoading: false });
 
-        return;
+        return { error: false };
       },
       updateCard: () => {
         throw new Error("Not implemented yet");

@@ -53,11 +53,11 @@ export function PokemonCard({
             <div>
               <h4>
                 Retail price:{" "}
-                <span className="font-semibold">${spotlight.toFixed(2)}</span>
+                <span className="font-semibold">$ {spotlight.toFixed(2)}</span>
               </h4>
               <h4>
                 Market price:{" "}
-                <span className="font-semibold">${market.toFixed(2)}</span>
+                <span className="font-semibold">$ {market.toFixed(2)}</span>
               </h4>
             </div>
 

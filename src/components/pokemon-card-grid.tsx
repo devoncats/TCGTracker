@@ -1,15 +1,28 @@
 import { usePokemonStore } from "@/app/stores/pokemon.store";
 import { PokemonCard } from "@/components/pokemon-card";
 import { PokemonCardData } from "@/types";
-import { Loader, SearchX } from "lucide-react";
+import { BadgePlus, LoaderCircle, SearchX } from "lucide-react";
 
 interface PokemonCardGridProps {
   cards: PokemonCardData[];
 }
 
 export function PokemonCardGrid({ cards }: PokemonCardGridProps) {
-  const { isLoading, error, message, searchTerm, priceFilter } =
-    usePokemonStore();
+  const { isLoading, searchTerm, priceFilter } = usePokemonStore();
+
+  if (cards.length === 0) {
+    return (
+      <div className="grid h-full place-content-center place-items-center gap-4">
+        <BadgePlus size={32} />
+        <span className="grid place-items-center">
+          <p className="font-semibold">No cards yet</p>
+          <p className="text-muted-foreground text-sm">
+            Start by adding a new card to your collection
+          </p>
+        </span>
+      </div>
+    );
+  }
 
   if ((searchTerm !== "" || priceFilter === 0) && cards.length === 0) {
     return (
@@ -25,9 +38,12 @@ export function PokemonCardGrid({ cards }: PokemonCardGridProps) {
     );
   }
 
-  if (isLoading) return <Loader />;
-
-  if (error) return <div>{message}</div>;
+  if (isLoading)
+    return (
+      <div className="grid h-full place-content-center">
+        <LoaderCircle className="animate-spin" />
+      </div>
+    );
 
   return (
     <div className="grid grid-cols-1 gap-4 pr-4 lg:grid-cols-2 2xl:grid-cols-3">

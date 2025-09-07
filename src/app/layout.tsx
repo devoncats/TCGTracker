@@ -1,4 +1,5 @@
 import { SiteHeader } from "@/components/site-header";
+import { Toaster } from "@/components/ui/sonner";
 import { seoMetadata } from "@/config/seo-metadata";
 import { fontDisplay, fontMono, fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
@@ -27,7 +28,7 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
-      lang="en_US"
+      lang="en"
       className={`${fontSans.variable} ${fontDisplay.variable} ${fontMono.variable} scroll-smooth`}
     >
       <head />
@@ -41,6 +42,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <SiteHeader />
           <div className="flex-1">{children}</div>
         </div>
+
+        <Toaster />
       </body>
     </html>
   );
