@@ -1,11 +1,12 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
-import { PokemonCardData } from "@/types";
+import { ActionResponse, PokemonCardData, PokemonCardDataDTO } from "@/types";
 
-export async function getAllCards() {
+export async function getAllCards(): ActionResponse<PokemonCardData[]> {
   try {
     const cards = await prisma.card.findMany();
+
     return {
       error: false,
       data: cards,
@@ -14,15 +15,24 @@ export async function getAllCards() {
     return {
       error: true,
       message: (error as Error).message,
+      data: [],
     };
   }
 }
 
-export async function getCardById(id: string) {
+export async function getCardById(id: string): ActionResponse<PokemonCardData> {
   try {
     const card = await prisma.card.findUnique({
       where: { id },
     });
+
+    if (!card) {
+      return {
+        error: true,
+        message: "Card does not exist",
+        data: undefined,
+      };
+    }
 
     return {
       error: false,
@@ -32,11 +42,14 @@ export async function getCardById(id: string) {
     return {
       error: true,
       message: (error as Error).message,
+      data: undefined,
     };
   }
 }
 
-export async function createCard(pokemonCardData: PokemonCardData) {
+export async function createCard(
+  pokemonCardData: PokemonCardDataDTO
+): ActionResponse<PokemonCardData> {
   try {
     const card = await prisma.card.create({
       data: {
@@ -52,11 +65,15 @@ export async function createCard(pokemonCardData: PokemonCardData) {
     return {
       error: true,
       message: (error as Error).message,
+      data: undefined,
     };
   }
 }
 
-export async function updateCard(id: string, pokemonCardData: PokemonCardData) {
+export async function updateCard(
+  id: string,
+  pokemonCardData: PokemonCardData
+): ActionResponse<PokemonCardData> {
   try {
     const card = await prisma.card.update({
       where: { id },
@@ -70,12 +87,13 @@ export async function updateCard(id: string, pokemonCardData: PokemonCardData) {
   } catch (error) {
     return {
       error: true,
-      messsage: (error as Error).message,
+      message: (error as Error).message,
+      data: undefined,
     };
   }
 }
 
-export async function deleteCard(id: string) {
+export async function deleteCard(id: string): ActionResponse<PokemonCardData> {
   try {
     const card = await prisma.card.delete({
       where: { id },
@@ -89,6 +107,7 @@ export async function deleteCard(id: string) {
     return {
       error: true,
       message: (error as Error).message,
+      data: undefined,
     };
   }
 }

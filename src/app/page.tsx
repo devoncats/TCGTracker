@@ -1,12 +1,11 @@
-import { PokemonCardDashboard } from "@/components/pokemon-card-dashboard";
+import { PokemonCardList } from "@/components/pokemon-card-list";
 import { Sidebar } from "@/components/sidebar";
 
-export default async function HomePage() {
+export default function HomePage() {
   return (
     <main className="flex h-[calc(100vh-69px)]">
       <Sidebar />
-
-      <PokemonCardDashboard />
+      <PokemonCardList />
     </main>
   );
 }

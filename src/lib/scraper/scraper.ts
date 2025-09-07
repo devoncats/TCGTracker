@@ -1,10 +1,10 @@
 "use server";
 
 import { LOCALE, USER_AGENT, VALID_HOSTNAMES } from "@/constants";
-import { PokemonCardDataDTO } from "@/types";
+import { ActionResponse, PokemonCardDataDTO } from "@/types";
 import { chromium } from "playwright";
 
-export async function scrape(url: string): Promise<PokemonCardDataDTO> {
+export async function scrape(url: string): ActionResponse<PokemonCardDataDTO> {
   const isValidUrl = validateUrl(url);
 
   if (!isValidUrl) {
@@ -31,12 +31,12 @@ export async function scrape(url: string): Promise<PokemonCardDataDTO> {
     const data = await page.$eval(".product-details__product", (root) => {
       function getText(selector: string) {
         const element = root.querySelector(selector);
-        return element ? element.textContent.trim() : null;
+        return element ? element.textContent.trim() : "";
       }
 
       function getImage(selector: string) {
         const element = root.querySelector(selector) as HTMLImageElement;
-        return element ? element.getAttribute("src") : null;
+        return element ? element.getAttribute("src") : "";
       }
 
       return {
@@ -52,11 +52,11 @@ export async function scrape(url: string): Promise<PokemonCardDataDTO> {
     const { pathname } = new URL(url);
     const [_, id] = pathname.split("/").filter(Boolean);
 
-    const [name] = data.fetchedTitle ? data.fetchedTitle.split(" - ") : [null];
+    const [name] = data.fetchedTitle ? data.fetchedTitle.split(" - ") : [""];
 
     const [number, rarity] = data.fetchedNumberRarity
       ? data.fetchedNumberRarity.split(" / ")
-      : [null, null];
+      : ["", ""];
 
     const {
       fetchedSet,
@@ -67,15 +67,15 @@ export async function scrape(url: string): Promise<PokemonCardDataDTO> {
 
     const spotlight = fetchedSpotlightPrice
       ? Number(fetchedSpotlightPrice.replace("$", ""))
-      : null;
+      : 0;
 
     const market = fetchedMarketPrice
       ? Number(fetchedMarketPrice.replace("$", ""))
-      : null;
+      : 0;
 
     const image = fetchedImage
       ? fetchedImage.replace("200x200", "1000x1000")
-      : null;
+      : "";
 
     return {
       error: false,

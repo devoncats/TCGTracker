@@ -1,10 +1,12 @@
-import { getAllCards } from "@/lib/actions/card.actions";
+import { createCard, getAllCards } from "@/lib/actions/card.actions";
 import {
-  filterCardsByPrice,
-  getTotal,
+  filteredCardsByPrice,
+  getMaxPrice,
+  getTotalPrice,
   searchCards,
   sortCards,
 } from "@/lib/card-adapter";
+import { scrape } from "@/lib/scraper/scraper";
 import { PokemonCardStore } from "@/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -25,6 +27,9 @@ export const usePokemonStore = create<PokemonCardStore>()(
       error: false,
       message: null,
 
+      // Add New Data
+      pageRoute: "",
+
       // Actions
       fetchCards: async () => {
         set({ isLoading: true, error: false, message: null });
@@ -41,10 +46,43 @@ export const usePokemonStore = create<PokemonCardStore>()(
           return;
         }
 
-        set({ cards: response.data, isLoading: false });
+        set({
+          cards: response.data,
+          isLoading: false,
+        });
       },
-      addCard: () => {
-        throw new Error("Not implemented yet");
+      addCard: async () => {
+        set({ isLoading: true, error: false, message: null });
+
+        const { cards, pageRoute } = get();
+
+        const scrapped = await scrape(pageRoute);
+
+        if (scrapped.error) {
+          set({
+            error: true,
+            message: scrapped.message || "Unknown error",
+            isLoading: false,
+          });
+
+          return;
+        }
+
+        const response = await createCard(scrapped.data!);
+
+        if (response.error) {
+          set({
+            error: true,
+            message: response.message || "Unknown error",
+            isLoading: false,
+          });
+
+          return;
+        }
+
+        set({ cards: [...cards, response.data!], isLoading: false });
+
+        return;
       },
       updateCard: () => {
         throw new Error("Not implemented yet");
@@ -58,15 +96,18 @@ export const usePokemonStore = create<PokemonCardStore>()(
       setSortConfig: (sortConfig) => set({ sortConfig }),
       setPriceFilter: (priceFilter) => set({ priceFilter }),
 
+      // Add New Data Action
+      setPageRoute: (pageRoute) => set({ pageRoute }),
+
       // Computed selectors
       getRefinedCards: () => {
         const { cards, searchTerm, sortConfig, priceFilter } = get();
 
         const searchedCards = searchCards(cards, searchTerm);
         const sortedCards = sortCards(searchedCards, sortConfig);
-        const filteresCards = filterCardsByPrice(sortedCards, priceFilter);
+        const filteredCards = filteredCardsByPrice(sortedCards, priceFilter);
 
-        return filteresCards;
+        return filteredCards;
       },
       getStats: () => {
         const { cards } = get();
@@ -74,12 +115,18 @@ export const usePokemonStore = create<PokemonCardStore>()(
         const totalCards = cards.length;
 
         const uniqueSets = [...new Set(cards.map((card) => card.set))].sort();
-        const spotlightTotal = getTotal(cards, "spotlight");
-        const marketTotal = getTotal(cards, "market");
+
+        const maxSpotlightPrice = getMaxPrice(cards, "spotlight");
+        const maxMarketPrice = getMaxPrice(cards, "market");
+
+        const spotlightTotal = getTotalPrice(cards, "spotlight");
+        const marketTotal = getTotalPrice(cards, "market");
 
         return {
           owned: totalCards,
           sets: uniqueSets,
+          maxSpotlightPrice,
+          maxMarketPrice,
           spotlightTotal,
           marketTotal,
         };

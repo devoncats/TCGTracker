@@ -1,21 +1,17 @@
 import { Card } from "@prisma/client";
 
-export interface PokemonCardData extends Card {}
-
-export interface PokemonCardDataDTO {
-  data?: {
-    id?: string | null;
-    name?: string | null;
-    number?: string | null;
-    set?: string | null;
-    image?: string | null;
-    rarity?: string | null;
-    spotlight?: number | null;
-    market?: number | null;
-  };
+export type ActionResponse<T> = Promise<{
   error: boolean;
   message?: string;
-}
+  data?: T;
+}>;
+
+export interface PokemonCardData extends Card {}
+
+export type PokemonCardDataDTO = Omit<
+  PokemonCardData,
+  "createdAt" | "updatedAt" | "cachedAt"
+>;
 
 export const sortBy = {
   ASC_NAME: "Name: Low to High",
@@ -46,11 +42,12 @@ export interface PokemonCardStore {
   error: boolean;
   message: string | null;
 
+  // Add New Data
+  pageRoute: string;
+
   // Actions
   fetchCards: () => Promise<void>;
-  addCard: (
-    card: Omit<PokemonCardData, "createdAt" | "updatedAt" | "cachedAt">
-  ) => void;
+  addCard: () => void;
   updateCard: (
     id: string,
     card: Omit<PokemonCardData, "id" | "updatedAt">
@@ -62,11 +59,16 @@ export interface PokemonCardStore {
   setSortConfig: (sortConfig: SortBy) => void;
   setPriceFilter: (priceFilter: number) => void;
 
+  // Add New Data Action
+  setPageRoute: (pagrRoute: string) => void;
+
   // Computed selectors
   getRefinedCards: () => PokemonCardData[];
   getStats: () => {
     owned: number;
     sets: string[];
+    maxSpotlightPrice: number;
+    maxMarketPrice: number;
     spotlightTotal: string;
     marketTotal: string;
   };

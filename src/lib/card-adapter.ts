@@ -1,13 +1,26 @@
+import { rarities } from "@/constants";
 import { PokemonCardData, SortBy } from "@/types";
 
-export function getTotal(
+export function getTotalPrice(
   cards: PokemonCardData[],
   property: "spotlight" | "market"
 ): string {
-  return cards
+  const totalPrice = cards
     .map((card) => card[property])
     .reduce((a, b) => a + b, 0)
     .toFixed(2);
+
+  return totalPrice;
+}
+
+export function getMaxPrice(
+  cards: PokemonCardData[],
+  property: "spotlight" | "market"
+): number {
+  const prices = cards.map((card) => card[property]);
+  const maxPrice = Math.max(...prices);
+
+  return maxPrice;
 }
 
 export function sortCards(
@@ -41,14 +54,10 @@ export function sortCards(
         return b.market - a.market;
 
       case "ASC_DATE":
-        return (
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
+        return a.createdAt.getTime() - b.createdAt.getTime();
 
       case "DESC_DATE":
-        return (
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
+        return b.createdAt.getTime() - a.createdAt.getTime();
 
       default:
         return 0;
@@ -68,7 +77,6 @@ export function searchCards(
 
   const searchedCards = cards.filter((card) => {
     return (
-      // Added missing return statement
       card.name.toLowerCase().includes(loweredSearchTerm) ||
       card.set.toLowerCase().includes(loweredSearchTerm) ||
       card.number.toLowerCase().includes(loweredSearchTerm) ||
@@ -79,11 +87,21 @@ export function searchCards(
   return searchedCards;
 }
 
-export function filterCardsByPrice(
+export function filteredCardsByPrice(
   cards: PokemonCardData[],
   maxPrice: number
 ): PokemonCardData[] {
-  if (maxPrice === 0) return cards;
-
   return cards.filter((card) => card.spotlight <= maxPrice);
+}
+
+export function getRarityImage(rarity: string): string {
+  const normalizedInput = rarity.toLowerCase().trim();
+
+  for (const [_, value] of Object.entries(rarities)) {
+    if (value.aliases.includes(normalizedInput)) {
+      return value.image;
+    }
+  }
+
+  return "";
 }

@@ -1,9 +1,10 @@
 "use client";
 
 import { usePokemonStore } from "@/app/stores/pokemon.store";
-import { CardSortBy } from "@/components/card-filters";
 import CardSlider from "@/components/card-slider";
+import { CardSortBy } from "@/components/card-sort-by";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export function Filters() {
   const { searchTerm, setSearchTerm } = usePokemonStore();
@@ -14,19 +15,24 @@ export function Filters() {
     setSearchTerm(event.target.value);
   };
   return (
-    <>
-      <div className="flex gap-4">
-        <Input value={searchTerm} onChange={handleSearchTermChange} />
-      </div>
-      <div className="flex gap-4">
-        <div className="flex gap-2">
-          <div className="flex w-fit items-center gap-4">
-            <CardSortBy />
+    <article className="bg-muted grid gap-4 rounded border p-4">
+      <h2 className="heading">Filters</h2>
 
-            <CardSlider />
-          </div>
+      <div className="grid gap-1">
+        <Label>Search card</Label>
+        <Input
+          value={searchTerm}
+          onChange={handleSearchTermChange}
+          placeholder="Terapagos ex - 128/142 - SV07: Stellar Crown (SCR)"
+        />
+      </div>
+
+      <div className="grid">
+        <div className="flex flex-col gap-4">
+          <CardSortBy />
+          <CardSlider />
         </div>
       </div>
-    </>
+    </article>
   );
 }

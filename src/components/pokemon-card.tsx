@@ -1,4 +1,6 @@
+import { getRarityImage } from "@/lib/card-adapter";
 import { PokemonCardData } from "@/types";
+import Image from "next/image";
 import Link from "next/link";
 
 export function PokemonCard({
@@ -20,27 +22,43 @@ export function PokemonCard({
 
   return (
     <Link href={`/cards/${id}`}>
-      <article className="bg-accent flex h-64 w-full gap-4 rounded border p-4">
-        <img src={image} alt={name} className="h-full rounded" />
+      <article className="bg-accent flex h-64 w-full gap-2 rounded border p-4">
+        <Image
+          src={image}
+          alt={name}
+          height={220}
+          width={160}
+          className="h-full rounded"
+        />
 
         <div className="flex w-full flex-col justify-between">
-          <div className="flex flex-col gap-2">
-            <h3 className="text-lg font-semibold">{name} ⭐⭐</h3>
-            <div className="text-muted-foreground text-sm">
+          <div>
+            <div className="flex items-start justify-between">
+              <h3 className="text-lg font-semibold">{name}</h3>
+              <Image
+                src={getRarityImage(rarity)}
+                alt={`${rarity} image`}
+                height={16}
+                width={16}
+              />
+            </div>
+
+            <div className="text-muted-foreground text-xs">
               <p>{set}</p>
               <p>{number}</p>
             </div>
           </div>
 
-          <div className="flex w-full items-end justify-between">
+          <div className="flex w-full items-end justify-between text-sm">
             <div>
-              <p>
+              <h4>
                 Retail price:{" "}
-                <span className="font-semibold">${spotlight}</span>
-              </p>
-              <p>
-                Market price: <span className="font-semibold">${market}</span>
-              </p>
+                <span className="font-semibold">${spotlight.toFixed(2)}</span>
+              </h4>
+              <h4>
+                Market price:{" "}
+                <span className="font-semibold">${market.toFixed(2)}</span>
+              </h4>
             </div>
 
             <span className="text-muted-foreground text-right text-xs">

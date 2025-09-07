@@ -16,8 +16,8 @@ export function CardSortBy() {
   };
 
   return (
-    <Select defaultValue={sortConfig} onValueChange={handleSortConfigChange}>
-      <SelectTrigger className="w-48">
+    <Select value={sortConfig} onValueChange={handleSortConfigChange}>
+      <SelectTrigger>
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
