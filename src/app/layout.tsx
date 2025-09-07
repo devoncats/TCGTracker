@@ -30,6 +30,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html
       lang="en"
       className={`${fontSans.variable} ${fontDisplay.variable} ${fontMono.variable} scroll-smooth`}
+      data-scroll-behavior="smooth"
     >
       <head />
       <body

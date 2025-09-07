@@ -1,10 +1,10 @@
 "use client";
 
-import { usePokemonStore } from "@/app/stores/pokemon.store";
 import CardSlider from "@/components/card-slider";
 import { CardSortBy } from "@/components/card-sort-by";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { usePokemonStore } from "@/stores/pokemon.store";
 
 export function Filters() {
   const { searchTerm, setSearchTerm } = usePokemonStore();

@@ -1,4 +1,3 @@
-import { usePokemonStore } from "@/app/stores/pokemon.store";
 import {
   Select,
   SelectContent,
@@ -6,6 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { usePokemonStore } from "@/stores/pokemon.store";
 import { sortBy } from "@/types";
 
 export function CardSortBy() {

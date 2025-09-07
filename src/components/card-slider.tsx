@@ -1,5 +1,5 @@
-import { usePokemonStore } from "@/app/stores/pokemon.store";
 import { Slider } from "@/components/ui/slider";
+import { usePokemonStore } from "@/stores/pokemon.store";
 
 export default function CardSlider() {
   const { getStats, priceFilter, setPriceFilter } = usePokemonStore();

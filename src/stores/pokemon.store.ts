@@ -1,4 +1,9 @@
-import { createCard, getAllCards } from "@/lib/actions/card.actions";
+import { THRESHOLD } from "@/constants";
+import {
+  createCard,
+  deleteCard,
+  getAllCards,
+} from "@/lib/actions/card.actions";
 import {
   filteredCardsByPrice,
   getMaxPrice,
@@ -46,6 +51,17 @@ export const usePokemonStore = create<PokemonCardStore>()(
           return;
         }
 
+        // TODO: IMPLEMENT FETCHING USING UPDATE
+        const cachedAtValues = response
+          .data!.map((item) => item.cachedAt)
+          .filter((cachedAt) => cachedAt !== undefined);
+
+        cachedAtValues.forEach((cachedAt, index) => {
+          if (cachedAt.getTime() < THRESHOLD) {
+            console.log(`Item ${index} is old: ${new Date(cachedAt)}`);
+          }
+        });
+
         set({
           cards: response.data,
           isLoading: false,
@@ -87,8 +103,23 @@ export const usePokemonStore = create<PokemonCardStore>()(
       updateCard: () => {
         throw new Error("Not implemented yet");
       },
-      deleteCard: () => {
-        throw new Error("Not implemented yet");
+      deleteCard: async (id: string) => {
+        const { cards } = get();
+
+        const response = await deleteCard(id);
+
+        if (response.error) {
+          set({
+            error: true,
+            message: response.message || "Unknown error",
+            isLoading: false,
+          });
+        }
+
+        set({
+          cards: cards.filter((card) => card.id !== id),
+          isLoading: false,
+        });
       },
 
       // Search & Sort Actions

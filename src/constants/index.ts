@@ -73,3 +73,5 @@ export const rarities = {
     image: "/rarity/black-star-promo.png",
   },
 };
+
+export const THRESHOLD = Date.now() - 24 * 60 * 60 * 1000;

@@ -1,7 +1,7 @@
 "use client";
 
-import { usePokemonStore } from "@/app/stores/pokemon.store";
 import { PokemonCardGrid } from "@/components/pokemon-card-grid";
+import { usePokemonStore } from "@/stores/pokemon.store";
 import { useEffect } from "react";
 
 export function PokemonCardList() {

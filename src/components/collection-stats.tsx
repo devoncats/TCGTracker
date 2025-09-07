@@ -1,4 +1,4 @@
-import { usePokemonStore } from "@/app/stores/pokemon.store";
+import { usePokemonStore } from "@/stores/pokemon.store";
 
 export function CollectionStats() {
   const { getStats } = usePokemonStore();
